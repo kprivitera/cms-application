@@ -3,34 +3,37 @@ import { useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import _ from 'lodash'
+import jwt from 'jsonwebtoken'
 import type { NextPage } from 'next'
 
 import { LOGIN_USER } from '../queries'
-import { useAppStore } from '../store'
 import Button from '../components/button'
 import ContentBlock from '../components/content-block'
+import authRetry from '../utils/auth-retry'
 import setCookie from '../utils/set-cookie'
+
+type Login = {
+  username: string
+  password: string
+}
 
 const Home: NextPage = () => {
   const router = useRouter()
 
-  const [loginUser, { data: loginData, loading: loadingLogin, error: loginError }] = useMutation(LOGIN_USER)
+  const [loginUser] = useMutation(LOGIN_USER)
+  const { register, handleSubmit } = useForm()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm()
-
-  const onLogin = async (data) => {
+  const onLogin = async (data: Login) => {
     try {
       const authToken = await loginUser({
-        variables: { username: data.username, password: data.password },
+        variables: { password: data.password, username: data.username },
       })
       const authTokenValue = _.get(authToken, 'data.authenticate')
 
       localStorage.setItem('token', authTokenValue)
       setCookie<boolean>({ name: 'isAuthenticated', value: true })
+
+      jwt.verify(authTokenValue, 'secret')
       router.push('/home')
     } catch (error) {
       console.log('error loggin in')
@@ -38,7 +41,16 @@ const Home: NextPage = () => {
   }
 
   useEffect(() => {
-    setCookie<boolean>({ name: 'isAuthenticated', value: false })
+    const fetchData = async () => {
+      try {
+        await authRetry()
+        setCookie<boolean>({ name: 'isAuthenticated', value: true })
+        router.push('/home')
+      } catch (error) {
+        setCookie<boolean>({ name: 'isAuthenticated', value: false })
+      }
+    }
+    fetchData()
   }, [])
 
   return (
