@@ -13,6 +13,8 @@ const Home: NextPage = () => {
   const [tableBody, setTableBody] = useState<Array<TableBody>>([])
   const words = _.get(data, 'words')
 
+  const getWordsHandler = async () => await getWords({ variables: { itemsByPage: 300, page: 1 } })
+
   useEffect(() => {
     if (words) {
       const createTableBody = _.map(words, ({ id, name, description }) => ({
@@ -33,7 +35,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Button onClick={async () => await getWords({ variables: { itemsByPage: 300, page: 1 } })}>Load words</Button>
+      <Button onClick={getWordsHandler}>Load words</Button>
       {words && <Table theadData={['name', 'description']} tbodyData={tableBody} />}
     </div>
   )
