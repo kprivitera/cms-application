@@ -1,57 +1,37 @@
-import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { useMutation } from '@apollo/client'
-import { useRouter } from 'next/router'
-import _ from 'lodash'
-import jwt from 'jsonwebtoken'
-import type { NextPage } from 'next'
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
+import _ from 'lodash';
+import type { NextPage } from 'next';
 
-import { LOGIN_USER } from '../queries'
-import Button from '../components/button'
-import ContentBlock from '../components/content-block'
-import authRetry from '../utils/auth-retry'
-import setCookie from '../utils/set-cookie'
+import { LOGIN_USER } from '../queries';
+import Button from '../components/button';
+import ContentBlock from '../components/content-block';
+import setCookie from '../utils/set-cookie';
 
 type Login = {
-  username: string
-  password: string
-}
+  username: string;
+  password: string;
+};
 
 const Home: NextPage = () => {
-  const router = useRouter()
+  const router = useRouter();
 
-  const [loginUser] = useMutation(LOGIN_USER)
-  const { register, handleSubmit } = useForm()
+  const [loginUser] = useMutation(LOGIN_USER);
+  const { register, handleSubmit } = useForm();
 
   const onLogin = async (data: Login) => {
     try {
       const authToken = await loginUser({
         variables: { password: data.password, username: data.username },
-      })
-      const authTokenValue = _.get(authToken, 'data.authenticate')
-
-      localStorage.setItem('token', authTokenValue)
-      setCookie<boolean>({ name: 'isAuthenticated', value: true })
-
-      jwt.verify(authTokenValue, 'secret')
-      router.push('/home')
+      });
+      const authTokenValue = _.get(authToken, 'data.authenticate');
+      setCookie<boolean>({ name: 'auth-token', value: authTokenValue });
+      router.push('/profile');
     } catch (error) {
-      console.log('error loggin in')
+      console.log('error loggin in');
     }
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await authRetry()
-        setCookie<boolean>({ name: 'isAuthenticated', value: true })
-        router.push('/home')
-      } catch (error) {
-        setCookie<boolean>({ name: 'isAuthenticated', value: false })
-      }
-    }
-    fetchData()
-  }, [])
+  };
 
   return (
     <ContentBlock>
@@ -80,7 +60,7 @@ const Home: NextPage = () => {
         </div>
       </main>
     </ContentBlock>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

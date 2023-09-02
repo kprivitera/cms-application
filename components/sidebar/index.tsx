@@ -1,21 +1,31 @@
-import { MenuItem, SidebarWrapper } from './styles'
+import { map } from 'lodash/fp';
+import { useRouter } from 'next/router';
+
+import { MenuItem, SidebarWrapper } from './styles';
+
+const menuItems = [
+  { link: '/profile', text: 'Profile' },
+  { link: '/words', text: 'Words' },
+];
 
 const SideBar = () => {
+  const router = useRouter();
   return (
     <SidebarWrapper>
       <ul>
-        <li>
-          <MenuItem>Email</MenuItem>
-        </li>
-        <li>
-          <MenuItem active={true}>Email</MenuItem>
-        </li>
-        <li>
-          <MenuItem>Email</MenuItem>
-        </li>
+        {map(({ link, text }) => {
+          const isActive = router.asPath === link;
+          return (
+            <li>
+              <MenuItem active={isActive} href={link}>
+                {text}
+              </MenuItem>
+            </li>
+          );
+        }, menuItems)}
       </ul>
     </SidebarWrapper>
-  )
-}
+  );
+};
 
-export default SideBar
+export default SideBar;

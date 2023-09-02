@@ -9,6 +9,33 @@ export const GET_WORDS = gql`
     }
   }
 `
+
+export const GET_USER_BY_ID = gql`
+  query User($userId: Int) {
+    user(id: $userId) {
+      firstName
+      email
+      friends {
+        email
+        firstName
+        id
+        lastName
+        username
+      }
+      id
+      lastName
+      username
+      receivedFriendRequests {
+        email
+        lastName
+        senderId
+        status
+        username
+      }
+    }
+  }
+`
+
 export const LOGIN_USER = gql`
   mutation Login($username: String!, $password: String!) {
     authenticate(username: $username, password: $password)
