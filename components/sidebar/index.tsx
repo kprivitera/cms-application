@@ -1,9 +1,9 @@
 'use client';
 
 import { map } from 'lodash/fp';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
-import { MenuItem, SidebarWrapper } from './styles';
+import MenuItem from '../menu-item';
 
 type MenuItem = {
   link: string;
@@ -15,13 +15,11 @@ type SidebarProps = {
 };
 
 const SideBar = ({ menuItems }: SidebarProps) => {
-  const router = useRouter();
-  // console.log(router);
+  const pathName = usePathname();
   return (
-    // <SidebarWrapper>
     <ul>
       {map(({ link, text }) => {
-        const isActive = router.asPath === link;
+        const isActive = pathName === link;
         return (
           <li key={link}>
             <MenuItem active={isActive} href={link}>
@@ -31,7 +29,6 @@ const SideBar = ({ menuItems }: SidebarProps) => {
         );
       }, menuItems)}
     </ul>
-    // </SidebarWrapper>
   );
 };
 

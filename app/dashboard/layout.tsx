@@ -1,15 +1,15 @@
-export default function DashboardLayout({
-  children, // will be a page or nested layout
-}: {
-  children: React.ReactNode;
-}) {
+import Sidebar from '../../components/sidebar';
+
+const menuItems = [
+  { link: '/dashboard/profile', text: 'Profile' },
+  { link: '/dashboard/words', text: 'Words' },
+  { link: '/dashboard/words/add', text: 'Add words' },
+];
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <section>
-      {/* Include shared UI here e.g. a header or sidebar */}
-      <div>ddsnnnjnjknjn</div>
-      <div>ddsnnnjnjknjn</div>
-      <div>ddsnnnjnjknjn</div>
-
+      <Sidebar menuItems={menuItems} />
       {children}
     </section>
   );
