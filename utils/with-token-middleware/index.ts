@@ -1,13 +1,16 @@
+import { cookies } from 'next/headers';
+import { get } from 'lodash/fp';
 import { setContext } from '@apollo/client/link/context';
-import cookies from 'js-cookie';
 
 import { verify } from '../jwt';
 
 const withToken = setContext(async () => {
-  const authCookie = cookies.get('auth-token') || '';
-  console.log('middleware auth cookie', authCookie);
+  const cookieStore = cookies();
+  const authCookie = cookieStore.get('auth-token') || '';
+  const authCookieValue = get('value', authCookie);
+  console.log('withToken: middleware auth cookie', authCookieValue);
   try {
-    await verify(authCookie, 'secret');
+    await verify(authCookieValue, 'secret');
     // Return them as part of the context object
     return { authCookie };
   } catch (error) {

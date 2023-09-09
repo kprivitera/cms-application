@@ -1,4 +1,5 @@
 import { ApolloLink } from '@apollo/client';
+import { get } from 'lodash/fp';
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   const { authCookie } = operation.getContext();
@@ -8,7 +9,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
     return {
       headers: {
         ...headers,
-        'x-access-token': authCookie || null,
+        'x-access-token': get('value', authCookie) || null,
       },
     };
   });

@@ -1,30 +1,37 @@
+'use client';
+
 import { map } from 'lodash/fp';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { MenuItem, SidebarWrapper } from './styles';
 
-const menuItems = [
-  { link: '/profile', text: 'Profile' },
-  { link: '/words', text: 'Words' },
-];
+type MenuItem = {
+  link: string;
+  text: string;
+};
 
-const SideBar = () => {
+type SidebarProps = {
+  menuItems: MenuItem[];
+};
+
+const SideBar = ({ menuItems }: SidebarProps) => {
   const router = useRouter();
+  // console.log(router);
   return (
-    <SidebarWrapper>
-      <ul>
-        {map(({ link, text }) => {
-          const isActive = router.asPath === link;
-          return (
-            <li>
-              <MenuItem active={isActive} href={link}>
-                {text}
-              </MenuItem>
-            </li>
-          );
-        }, menuItems)}
-      </ul>
-    </SidebarWrapper>
+    // <SidebarWrapper>
+    <ul>
+      {map(({ link, text }) => {
+        const isActive = router.asPath === link;
+        return (
+          <li key={link}>
+            <MenuItem active={isActive} href={link}>
+              {text}
+            </MenuItem>
+          </li>
+        );
+      }, menuItems)}
+    </ul>
+    // </SidebarWrapper>
   );
 };
 
