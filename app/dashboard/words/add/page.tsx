@@ -1,19 +1,34 @@
+import { redirect } from 'next/navigation';
 import type { NextPage } from 'next';
+
+import { CREATE_WORD } from '../../../../queries';
+import { getClient } from '../../../../apollo-client';
 
 const AddWords: NextPage = async () => {
   async function create(formData: FormData) {
     'use server';
-    const word = formData.get('word');
+    const name = formData.get('name');
     const description = formData.get('description');
-    console.log({ word, description });
+    console.log({ name, description });
+    const client = getClient();
+    try {
+      const newWord = await client.mutate({
+        mutation: CREATE_WORD,
+        variables: { input: { name, description } },
+      });
+      redirect('/dashboard/words/add-action');
+    } catch (error) {
+      console.log(error);
+    }
+    redirect('/dashboard/words');
   }
   return (
-    <form action={create}>
+    <form action={create} method="POST">
       <fieldset>
         <legend>Add new word</legend>
         <p>
-          <label htmlFor="word">Word</label>
-          <input type="input" name="word" id="word" />
+          <label htmlFor="name">Word</label>
+          <input type="input" name="name" id="name" />
         </p>
         <p>
           <label htmlFor="word">Description</label>

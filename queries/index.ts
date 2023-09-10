@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 export const GET_WORDS = gql`
   query GetWords($itemsByPage: Int!, $page: Int!) {
@@ -8,7 +8,7 @@ export const GET_WORDS = gql`
       description
     }
   }
-`
+`;
 
 export const GET_USER_BY_ID = gql`
   query User($userId: Int) {
@@ -34,10 +34,26 @@ export const GET_USER_BY_ID = gql`
       }
     }
   }
-`
+`;
 
 export const LOGIN_USER = gql`
   mutation Login($username: String!, $password: String!) {
     authenticate(username: $username, password: $password)
   }
-`
+`;
+
+export const CREATE_WORD = gql`
+  mutation Authenticate($input: WordInput) {
+    createWord(input: $input) {
+      description
+      id
+      name
+    }
+  }
+`;
+
+export const DELETE_WORD = gql`
+  mutation Authenticate($id: ID) {
+    deleteWord(id: $id)
+  }
+`;
