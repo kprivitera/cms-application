@@ -10,6 +10,26 @@ export const GET_WORDS = gql`
   }
 `;
 
+export const GET_WORD = gql`
+  query Word($id: ID) {
+    word(id: $id) {
+      name
+      id
+      description
+    }
+  }
+`;
+
+export const UPDATE_WORD = gql`
+  mutation UpdateWord($input: UpdateWordInput) {
+    updateWord(input: $input) {
+      name
+      id
+      description
+    }
+  }
+`;
+
 export const GET_USER_BY_ID = gql`
   query User($userId: Int) {
     user(id: $userId) {

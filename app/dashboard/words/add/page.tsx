@@ -1,10 +1,9 @@
 import { redirect } from 'next/navigation';
-import type { NextPage } from 'next';
 
 import { CREATE_WORD } from '../../../../queries';
 import { getClient } from '../../../../apollo-client';
 
-const AddWords: NextPage = async () => {
+const AddWords = async () => {
   async function create(formData: FormData) {
     'use server';
     const name = formData.get('name');
@@ -12,7 +11,7 @@ const AddWords: NextPage = async () => {
     console.log({ name, description });
     const client = getClient();
     try {
-      const newWord = await client.mutate({
+      await client.mutate({
         mutation: CREATE_WORD,
         variables: { input: { name, description } },
       });

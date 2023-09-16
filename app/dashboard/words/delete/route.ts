@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     variables: { id },
   });
   console.log('deletedWord: ', deletedWord);
-  redirect('/dashboard/words', 'replace' as RedirectType);
+  redirect('/dashboard/words');
 
   return null;
 }

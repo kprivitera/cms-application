@@ -22,6 +22,7 @@ const Words: NextPage = async () => {
             <th>id</th>
             <th>name</th>
             <th>description</th>
+            <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
@@ -32,6 +33,9 @@ const Words: NextPage = async () => {
                 <td>{id}</td>
                 <td>{name}</td>
                 <td>{description}</td>
+                <td>
+                  <Link href={`/dashboard/words/edit?id=${id}`}>Update</Link>
+                </td>
                 <td>
                   <Link href={`/dashboard/words/delete?id=${id}`}>Delete</Link>
                 </td>

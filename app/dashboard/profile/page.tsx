@@ -1,21 +1,16 @@
 import { cookies } from 'next/headers';
 import { get } from 'lodash/fp';
-import type { NextPage } from 'next';
 
 import { GET_USER_BY_ID } from '../../../queries';
 import { User } from '../../../types';
 import { getClient } from '../../../apollo-client';
 import { verify } from '../../../utils/jwt';
 
-type ProfileProps = {
-  // userData: User;
-};
-
 interface UserData {
   user: User;
 }
 
-const Profile: NextPage = async ({}: ProfileProps) => {
+const Profile = async () => {
   const cookieStore = cookies();
   const authCookie = cookieStore.get('auth-token') || '';
   const authToken = get('value', authCookie);
