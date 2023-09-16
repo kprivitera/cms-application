@@ -11,7 +11,7 @@ const Words: NextPage = async () => {
   const client = getClient();
   const wordsData = await client.query<{ data: unknown }>({
     query: GET_WORDS,
-    variables: { itemsByPage: 500, page: 1 },
+    variables: { itemsByPage: 50, page: 1 },
   });
   const words = get('data.words', wordsData);
   return (
