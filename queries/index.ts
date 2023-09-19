@@ -77,3 +77,15 @@ export const DELETE_WORD = gql`
     deleteWord(id: $id)
   }
 `;
+
+export const SEARCH_USERS = gql`
+  query SearchUsers($searchTerm: String!, $currentUserId: ID!) {
+    searchUsers(searchTerm: $searchTerm, currentUserId: $currentUserId) {
+      email
+      firstName
+      id
+      lastName
+      username
+    }
+  }
+`;

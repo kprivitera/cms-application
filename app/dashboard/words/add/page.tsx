@@ -9,8 +9,8 @@ const AddWords = async (props) => {
     'use server';
     const name = formData.get('name');
     const description = formData.get('description');
-    console.log({ name, description });
     const client = getClient();
+
     try {
       await client.mutate({
         mutation: CREATE_WORD,
@@ -19,7 +19,6 @@ const AddWords = async (props) => {
     } catch (error) {
       console.log(error);
     }
-    revalidatePath('/dashboard/words/a');
     redirect('/dashboard/words/a');
   }
 

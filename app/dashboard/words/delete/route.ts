@@ -11,11 +11,9 @@ import { getClient } from '../../../../apollo-client';
 export async function POST(request: NextRequest) {
   const headersList = headers();
   const referer = headersList.get('referer') || DEFAULT_WORD_PAGE;
-  console.log(headersList.get('referer'));
   const id = request.nextUrl.searchParams.get('id');
-  console.log('id', id);
-
   const client = getClient();
+
   await client.mutate<{ data: unknown }>({
     mutation: DELETE_WORD,
     variables: { id },
