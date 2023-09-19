@@ -1,9 +1,10 @@
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 import { CREATE_WORD } from '../../../../queries';
 import { getClient } from '../../../../apollo-client';
 
-const AddWords = async () => {
+const AddWords = async (props) => {
   async function create(formData: FormData) {
     'use server';
     const name = formData.get('name');
@@ -15,12 +16,13 @@ const AddWords = async () => {
         mutation: CREATE_WORD,
         variables: { input: { name, description } },
       });
-      redirect('/dashboard/words/add-action');
     } catch (error) {
       console.log(error);
     }
-    redirect('/dashboard/words');
+    revalidatePath('/dashboard/words/a');
+    redirect('/dashboard/words/a');
   }
+
   return (
     <form action={create} method="POST">
       <fieldset>

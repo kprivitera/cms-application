@@ -8,7 +8,6 @@ const withToken = setContext(async () => {
   const cookieStore = cookies();
   const authCookie = cookieStore.get('auth-token') || '';
   const authCookieValue = get('value', authCookie);
-  console.log('withToken: middleware auth cookie', authCookieValue);
   try {
     await verify(authCookieValue, 'secret');
     // Return them as part of the context object

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_WORDS = gql`
-  query GetWords($itemsByPage: Int!, $page: Int!) {
-    words(itemsByPage: $itemsByPage, page: $page) {
+  query GetWords($itemsByPage: Int!, $letter: String, $page: Int!) {
+    words(itemsByPage: $itemsByPage, letter: $letter, page: $page) {
       id
       name
       description

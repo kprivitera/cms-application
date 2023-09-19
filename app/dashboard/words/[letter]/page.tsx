@@ -1,21 +1,32 @@
 'use server';
 import { Suspense } from 'react';
-import { get, map } from 'lodash/fp';
+import { get, map, toLower } from 'lodash/fp';
 import Link from 'next/link';
 import type { NextPage } from 'next';
 
-import { GET_WORDS } from '../../../queries';
-import { getClient } from '../../../apollo-client';
+import { ALPHABET } from '../../../../constants';
+import { GET_WORDS } from '../../../../queries';
+import { getClient } from '../../../../apollo-client';
 
-const Words: NextPage = async () => {
+const DEFAULT_LETTER = 'a';
+
+const Words: NextPage = async ({ params }) => {
+  const letter = get('letter', params);
   const client = getClient();
   const wordsData = await client.query<{ data: unknown }>({
     query: GET_WORDS,
-    variables: { itemsByPage: 50, page: 1 },
+    variables: { itemsByPage: 200, letter: toLower(letter) || DEFAULT_LETTER, page: 1 },
   });
   const words = get('data.words', wordsData);
   return (
-    <Suspense fallback={<p>Loading feed...</p>}>
+    <div>
+      {/* <Suspense fallback={<p>Loading feed...</p>}> */}
+      {map(
+        (letter) => (
+          <a href={`/dashboard/words/${toLower(letter)}`}>{letter}</a>
+        ),
+        ALPHABET,
+      )}
       <table>
         <thead>
           <tr>
@@ -37,14 +48,17 @@ const Words: NextPage = async () => {
                   <Link href={`/dashboard/words/edit?id=${id}`}>Update</Link>
                 </td>
                 <td>
-                  <Link href={`/dashboard/words/delete?id=${id}`}>Delete</Link>
+                  <form key={id} action={`/dashboard/words/delete?id=${id}`} method="POST">
+                    <button type="submit">Delete</button>
+                  </form>
                 </td>
               </tr>
             );
           }, words)}
         </tbody>
       </table>
-    </Suspense>
+      {/* </Suspense> */}
+    </div>
   );
 };
 

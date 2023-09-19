@@ -1,20 +1,25 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+// import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
+import { DEFAULT_WORD_PAGE } from '../../../../constants';
 import { DELETE_WORD } from '../../../../queries';
 import { getClient } from '../../../../apollo-client';
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
+  const headersList = headers();
+  const referer = headersList.get('referer') || DEFAULT_WORD_PAGE;
+  console.log(headersList.get('referer'));
   const id = request.nextUrl.searchParams.get('id');
   console.log('id', id);
 
   const client = getClient();
-  const deletedWord = await client.mutate<{ data: unknown }>({
+  await client.mutate<{ data: unknown }>({
     mutation: DELETE_WORD,
     variables: { id },
   });
-  console.log('deletedWord: ', deletedWord);
-  redirect('/dashboard/words');
-
-  return null;
+  revalidatePath(referer);
+  return NextResponse.redirect(new URL(referer), 303);
 }
