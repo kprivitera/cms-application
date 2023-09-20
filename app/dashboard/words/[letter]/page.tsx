@@ -20,44 +20,48 @@ const Words: NextPage = async ({ params }) => {
   const words = get('data.words', wordsData);
   return (
     <div>
-      {/* <Suspense fallback={<p>Loading feed...</p>}> */}
-      {map(
-        (letter) => (
-          <a href={`/dashboard/words/${toLower(letter)}`}>{letter}</a>
-        ),
-        ALPHABET,
-      )}
-      <table>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>name</th>
-            <th>description</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {map(({ name, id, description }) => {
-            return (
-              <tr>
-                <td>{id}</td>
-                <td>{name}</td>
-                <td>{description}</td>
-                <td>
-                  <Link href={`/dashboard/words/edit?id=${id}`}>Update</Link>
-                </td>
-                <td>
-                  <form key={id} action={`/dashboard/words/delete?id=${id}`} method="POST">
-                    <button type="submit">Delete</button>
-                  </form>
-                </td>
-              </tr>
-            );
-          }, words)}
-        </tbody>
-      </table>
-      {/* </Suspense> */}
+      <h1>Dictionary</h1>
+      <Suspense fallback={<p>Loading feed...</p>}>
+        <div>
+          <Link href={`/dashboard/words/add`}>Add new word</Link>
+        </div>
+        {map(
+          (letter) => (
+            <a href={`/dashboard/words/${toLower(letter)}`}>{letter}</a>
+          ),
+          ALPHABET,
+        )}
+        <table>
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>name</th>
+              <th>description</th>
+              <th>Edit</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {map(({ name, id, description }) => {
+              return (
+                <tr>
+                  <td>{id}</td>
+                  <td>{name}</td>
+                  <td>{description}</td>
+                  <td>
+                    <Link href={`/dashboard/words/edit?id=${id}`}>Update</Link>
+                  </td>
+                  <td>
+                    <form key={id} action={`/dashboard/words/delete?id=${id}`} method="POST">
+                      <button type="submit">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              );
+            }, words)}
+          </tbody>
+        </table>
+      </Suspense>
     </div>
   );
 };

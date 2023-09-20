@@ -86,6 +86,13 @@ export const SEARCH_USERS = gql`
       id
       lastName
       username
+      friendStatus
     }
+  }
+`;
+
+export const SEND_FRIEND_REQUEST = gql`
+  mutation SendFriendRequest($friendId: Int, $userId: Int) {
+    sendFriendRequest(friendId: $friendId, userId: $userId)
   }
 `;

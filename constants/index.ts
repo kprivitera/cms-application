@@ -1,3 +1,12 @@
+export enum FriendStatus {
+  None = 0,
+  Pending = 1,
+  Accepted = 2,
+  Rejected = 3,
+}
+
+export const DEFAULT_WORD_PAGE = '/dashboard/words/a';
+
 export const ALPHABET = [
   'A',
   'B',
@@ -26,5 +35,3 @@ export const ALPHABET = [
   'Y',
   'Z',
 ];
-
-export const DEFAULT_WORD_PAGE = '/dashboard/words/a';

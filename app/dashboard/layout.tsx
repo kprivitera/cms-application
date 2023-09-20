@@ -10,8 +10,7 @@ import Sidebar from '../../components/sidebar';
 
 const menuItems = [
   { link: '/dashboard/profile', text: 'Profile' },
-  { link: '/dashboard/words/a', text: 'Words' },
-  { link: '/dashboard/words/add', text: 'Add words' },
+  { link: '/dashboard/words/a', text: 'Dictionary' },
   { link: '/dashboard/friends', text: 'Friends' },
 ];
 
