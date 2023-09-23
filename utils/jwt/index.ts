@@ -18,8 +18,14 @@ export async function sign<T>(payload: ExtendedJWTPayload<T>, secret: string, ex
 }
 
 export async function verify<T>(token: string, secret: string): Promise<ExtendedJWTPayload<T>> {
-  const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
-  const extendedPayload = payload as ExtendedJWTPayload<T>;
-  // if its all good, return it, or perhaps just return a boolean
-  return extendedPayload;
+  try {
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
+    const extendedPayload = payload as ExtendedJWTPayload<T>;
+
+    // if its all good, return it, or perhaps just return a boolean
+    return extendedPayload;
+  } catch (error) {
+    console.log('verify: ', error);
+    throw error;
+  }
 }

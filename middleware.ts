@@ -3,18 +3,31 @@ import type { NextRequest } from 'next/server';
 
 import { verify } from './utils/jwt';
 
-const protectedRoutes = ['/home', '/profile'];
-
 export async function middleware(req: NextRequest) {
   const urlObj = req.nextUrl;
-  const authCookie = req.cookies.get('auth-token') as string | undefined;
-  const authCookieValue = authCookie || '';
-  const isProtectedRoute = protectedRoutes.includes(urlObj.pathname);
-  try {
-    if (isProtectedRoute) {
+  const authCookie = req.cookies.get('auth-token');
+  const authCookieValue = authCookie?.value || '';
+
+  if (urlObj.pathname === '/') {
+    try {
       await verify(authCookieValue, 'secret');
-      console.log('protected route');
+      const profileUrl = new URL('/dashboard/profile', req.url);
+      return NextResponse.redirect(profileUrl);
+    } catch (error) {
+      console.log('not authenticated, stay here');
+      return NextResponse.next();
     }
+  }
+
+  try {
+    console.log('before verify');
+    await verify(authCookieValue, 'secret');
+
+    // if (urlObj.pathname === '/') {
+    //   const profileUrl = new URL('/dashboard/profile', req.url);
+    //   return NextResponse.redirect(profileUrl);
+    // }
+
     return NextResponse.next();
   } catch (error) {
     console.log('not authenticated');
@@ -23,8 +36,6 @@ export async function middleware(req: NextRequest) {
   }
 }
 
-// Here you can specify all the paths for which this middleware function should run
-// Supports both a single string value or an array of matchers
-// export const config = {
-//   matcher: ['/*'],
-// };
+export const config = {
+  matcher: ['/', '/dashboard/:path*'],
+};

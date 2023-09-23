@@ -5,8 +5,28 @@ import type { NextPage } from 'next';
 
 import { LOGIN_USER } from '../queries';
 import { getClient } from '../apollo-client';
+import { verify } from '../utils/jwt';
 
 const Home: NextPage = () => {
+  // const cookieStore = cookies();
+  // const authCookie = cookieStore.get('auth-token') || '';
+  // const authToken = get('value', authCookie);
+  // console.log('home: authtoken', authToken);
+
+  // // try {
+  // verify<number>(authToken, 'secret')
+  //   .then((data) => {
+  //     console.log('home: authenticated', data);
+  //     redirect('/dashboard/profile');
+  //   })
+  //   .catch((error) => {
+  //     if (error.code === 'ERR_JWS_INVALID') {
+  //       console.log('home: unauthenticated', error.code);
+  //     } else {
+  //       throw error;
+  //     }
+  //   });
+
   async function create(formData: FormData) {
     'use server';
     const username = formData.get('username');

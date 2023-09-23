@@ -46,6 +46,7 @@ export const GET_USER_BY_ID = gql`
       lastName
       username
       receivedFriendRequests {
+        id
         email
         lastName
         senderId
@@ -94,5 +95,11 @@ export const SEARCH_USERS = gql`
 export const SEND_FRIEND_REQUEST = gql`
   mutation SendFriendRequest($friendId: Int, $userId: Int) {
     sendFriendRequest(friendId: $friendId, userId: $userId)
+  }
+`;
+
+export const ACCEPT_FRIEND_REQUEST = gql`
+  mutation AcceptFriendRequest($friendRequestId: Int) {
+    acceptFriendRequest(friendRequestId: $friendRequestId)
   }
 `;

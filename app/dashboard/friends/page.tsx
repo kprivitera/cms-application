@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { get, map } from 'lodash/fp';
 
 import { FriendStatus } from '../../../constants';
-import { SEARCH_USERS } from '../../../queries';
+import { GET_USER_BY_ID, SEARCH_USERS } from '../../../queries';
 import { User } from '../../../types';
 import { getClient } from '../../../apollo-client';
 import { verify } from '../../../utils/jwt';
@@ -16,12 +16,13 @@ const Friends = async ({ searchParams }) => {
   const cookieStore = cookies();
   const authCookie = cookieStore.get('auth-token') || '';
   const authToken = get('value', authCookie);
+  console.log('friends route before verify');
   const decryptedJWT = await verify<number>(authToken, 'secret');
 
   const userId = decryptedJWT.data;
 
   const client = getClient();
-  const userData = await client.query<{ data: UserData }>({
+  const searchData = await client.query<{ data: UserData }>({
     query: SEARCH_USERS,
     variables: {
       currentUserId: userId,
@@ -29,14 +30,24 @@ const Friends = async ({ searchParams }) => {
     },
   });
 
-  const users = get('data.searchUsers', userData);
+  const userData = await client.query<{ data: UserData }>({
+    query: GET_USER_BY_ID,
+    variables: {
+      userId,
+    },
+  });
+
+  const searchUsers = get('data.searchUsers', searchData);
+  const currentUser = get('data.user', userData);
+  console.log(currentUser);
 
   return (
     <div>
       <h1>Friends</h1>
       <form action="/dashboard/friends" method="GET">
         <fieldset>
-          <label htmlFor="username">Name</label>
+          <legend>User search:</legend>
+          <label htmlFor="username">Search: </label>
           <input id="searchTerm" name="searchTerm" type="text" required />
           <p>
             <button type="submit">Submit</button>
@@ -81,7 +92,67 @@ const Friends = async ({ searchParams }) => {
               </tr>
             </tbody>
           );
-        }, users)}
+        }, searchUsers)}
+      </table>
+      <p>Friend requests:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>Username</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Accept request</th>
+          </tr>
+        </thead>
+        {map(({ id, username, firstName, lastName, email }) => {
+          return (
+            <tbody>
+              <tr>
+                <td>{id}</td>
+                <td>{username}</td>
+                <td>{firstName}</td>
+                <td>{lastName}</td>
+                <td>{email}</td>
+                <td>
+                  <form
+                    key={id}
+                    action={`/dashboard/friends/accept-friend-request?friendRequestId=${id}`}
+                    method="POST"
+                  >
+                    <button type="submit">Accept</button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          );
+        }, currentUser.receivedFriendRequests)}
+      </table>
+      <p>Friends:</p>
+      <table>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>Username</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        {map(({ id, username, firstName, lastName, email, friendStatus }) => {
+          return (
+            <tbody>
+              <tr>
+                <td>{id}</td>
+                <td>{username}</td>
+                <td>{firstName}</td>
+                <td>{lastName}</td>
+                <td>{email}</td>
+              </tr>
+            </tbody>
+          );
+        }, currentUser.friends)}
       </table>
     </div>
   );
