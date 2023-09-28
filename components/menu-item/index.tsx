@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import classNames from 'classnames';
 
 type MenuItemProps = {
   active: boolean;
@@ -8,8 +9,12 @@ type MenuItemProps = {
 
 const menuItem = ({ active, children, ...restOfProps }: MenuItemProps) => {
   return (
-    <a {...restOfProps}>
-      {active && '> '}
+    <a
+      className={classNames('p-4 block rounded', {
+        'bg-[#7367AA]': active,
+      })}
+      {...restOfProps}
+    >
       {children}
     </a>
   );

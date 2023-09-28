@@ -17,18 +17,20 @@ type SidebarProps = {
 const SideBar = ({ menuItems }: SidebarProps) => {
   const pathName = usePathname();
   return (
-    <ul>
-      {map(({ link, text }) => {
-        const isActive = pathName === link;
-        return (
-          <li key={link}>
-            <MenuItem active={isActive} href={link}>
-              {text}
-            </MenuItem>
-          </li>
-        );
-      }, menuItems)}
-    </ul>
+    <aside className="bg-[#2f3349] h-full w-[16.25rem] fixed top-0 left-0 right-0 p-4">
+      <ul className="flex flex-col">
+        {map(({ link, text }) => {
+          const isActive = pathName === link;
+          return (
+            <li key={link}>
+              <MenuItem active={isActive} href={link}>
+                {text}
+              </MenuItem>
+            </li>
+          );
+        }, menuItems)}
+      </ul>
+    </aside>
   );
 };
 

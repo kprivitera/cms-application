@@ -5,28 +5,11 @@ import type { NextPage } from 'next';
 
 import { LOGIN_USER } from '../queries';
 import { getClient } from '../apollo-client';
-import { verify } from '../utils/jwt';
+import Button from '../components/button';
+import ContentWrapper from '../components/content-wrapper';
+import Input from '../components/input';
 
 const Home: NextPage = () => {
-  // const cookieStore = cookies();
-  // const authCookie = cookieStore.get('auth-token') || '';
-  // const authToken = get('value', authCookie);
-  // console.log('home: authtoken', authToken);
-
-  // // try {
-  // verify<number>(authToken, 'secret')
-  //   .then((data) => {
-  //     console.log('home: authenticated', data);
-  //     redirect('/dashboard/profile');
-  //   })
-  //   .catch((error) => {
-  //     if (error.code === 'ERR_JWS_INVALID') {
-  //       console.log('home: unauthenticated', error.code);
-  //     } else {
-  //       throw error;
-  //     }
-  //   });
-
   async function create(formData: FormData) {
     'use server';
     const username = formData.get('username');
@@ -42,19 +25,17 @@ const Home: NextPage = () => {
     redirect('/dashboard/profile');
   }
   return (
-    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-      <div className="">
-        <h1 className="text-xl font-semibold">Welcome</h1>
-      </div>
-      <div className="mt-4">
+    <main className="max-w-2xl mx-auto my-12">
+      <ContentWrapper>
+        <h1 className="">Welcome</h1>
         <form action={create}>
           <label htmlFor="username">Name</label>
-          <input id="username" name="username" type="text" required />
+          <Input id="username" name="username" type="text" required />
           <label htmlFor="password">Email</label>
-          <input id="password" name="password" type="text" required />
-          <button type="submit">Submit</button>
+          <Input id="password" name="password" type="text" required />
+          <Button>Submit</Button>
         </form>
-      </div>
+      </ContentWrapper>
     </main>
   );
 };

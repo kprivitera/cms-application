@@ -1,11 +1,15 @@
+import { camelCase, get, map } from 'lodash/fp';
 import { cookies } from 'next/headers';
-import { get, map } from 'lodash/fp';
 
 import { FriendStatus } from '../../../constants';
 import { GET_USER_BY_ID, SEARCH_USERS } from '../../../queries';
 import { User } from '../../../types';
 import { getClient } from '../../../apollo-client';
 import { verify } from '../../../utils/jwt';
+import Button from '../../../components/button';
+import ContentWrapper from '../../../components/content-wrapper';
+import Input from '../../../components/input';
+import Table from '../../../components/table';
 
 interface UserData {
   user: User;
@@ -16,9 +20,7 @@ const Friends = async ({ searchParams }) => {
   const cookieStore = cookies();
   const authCookie = cookieStore.get('auth-token') || '';
   const authToken = get('value', authCookie);
-  console.log('friends route before verify');
   const decryptedJWT = await verify<number>(authToken, 'secret');
-
   const userId = decryptedJWT.data;
 
   const client = getClient();
@@ -39,121 +41,84 @@ const Friends = async ({ searchParams }) => {
 
   const searchUsers = get('data.searchUsers', searchData);
   const currentUser = get('data.user', userData);
-  console.log(currentUser);
-
+  const friendsFields = ['username', 'first name', 'last name', 'email'];
   return (
     <div>
       <h1>Friends</h1>
-      <form action="/dashboard/friends" method="GET">
-        <fieldset>
-          <legend>User search:</legend>
-          <label htmlFor="username">Search: </label>
-          <input id="searchTerm" name="searchTerm" type="text" required />
-          <p>
-            <button type="submit">Submit</button>
-          </p>
-        </fieldset>
-      </form>
-      <p>Users found:</p>
-      <table>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>Username</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Send request</th>
-          </tr>
-        </thead>
-        {map(({ id, username, firstName, lastName, email, friendStatus }) => {
-          const friendStatusType = FriendStatus[friendStatus];
-          return (
-            <tbody>
-              <tr>
-                <td>{id}</td>
-                <td>{username}</td>
-                <td>{firstName}</td>
-                <td>{lastName}</td>
-                <td>{email}</td>
-                <td>{friendStatusType}</td>
-                <td>
-                  {friendStatus === 0 && (
-                    <form
-                      key={id}
-                      action={`/dashboard/friends/send-friend-request?userId=${userId}&friendId=${id}`}
-                      method="POST"
-                    >
-                      <button type="submit">Send</button>
-                    </form>
-                  )}
-                </td>
-              </tr>
-            </tbody>
-          );
-        }, searchUsers)}
-      </table>
-      <p>Friend requests:</p>
-      <table>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>Username</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Email</th>
-            <th>Accept request</th>
-          </tr>
-        </thead>
-        {map(({ id, username, firstName, lastName, email }) => {
-          return (
-            <tbody>
-              <tr>
-                <td>{id}</td>
-                <td>{username}</td>
-                <td>{firstName}</td>
-                <td>{lastName}</td>
-                <td>{email}</td>
-                <td>
+      <ContentWrapper>
+        <form action="/dashboard/friends" method="GET">
+          <fieldset>
+            {/* <legend>User search:</legend> */}
+            {/* <label htmlFor="username">Search: </label> */}
+            <Input id="searchTerm" name="searchTerm" type="text" placeholder="Search user" required />
+            <p>
+              <Button>Submit</Button>
+            </p>
+          </fieldset>
+        </form>
+      </ContentWrapper>
+      <ContentWrapper>
+        <h2>Users found:</h2>
+        <Table
+          theadData={[...friendsFields, 'friend status', 'send request']}
+          tbodyData={map((friend) => {
+            const items = friendsFields.map((item) => friend[camelCase(item)]);
+            const friendStatusType = FriendStatus[friend.friendStatus];
+
+            return {
+              id: friend.id,
+              items: [
+                ...items,
+                friendStatusType,
+                friend.friendStatus === 0 && (
                   <form
-                    key={id}
-                    action={`/dashboard/friends/accept-friend-request?friendRequestId=${id}`}
+                    key={friend.id}
+                    action={`/dashboard/friends/send-friend-request?userId=${userId}&friendId=${friend.id}`}
                     method="POST"
                   >
-                    <button type="submit">Accept</button>
+                    <Button>Send</Button>
                   </form>
-                </td>
-              </tr>
-            </tbody>
-          );
-        }, currentUser.receivedFriendRequests)}
-      </table>
-      <p>Friends:</p>
-      <table>
-        <thead>
-          <tr>
-            <th>id</th>
-            <th>Username</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        {map(({ id, username, firstName, lastName, email, friendStatus }) => {
-          return (
-            <tbody>
-              <tr>
-                <td>{id}</td>
-                <td>{username}</td>
-                <td>{firstName}</td>
-                <td>{lastName}</td>
-                <td>{email}</td>
-              </tr>
-            </tbody>
-          );
-        }, currentUser.friends)}
-      </table>
+                ),
+              ],
+            };
+          }, searchUsers)}
+        />
+      </ContentWrapper>
+      <ContentWrapper>
+        <h2>Friend requests:</h2>
+        <Table
+          theadData={[...friendsFields, 'accept request']}
+          tbodyData={map((friend) => {
+            const items = friendsFields.map((item) => friend[camelCase(item)]);
+            return {
+              id: friend.id,
+              items: [
+                ...items,
+                <form
+                  key={friend.id}
+                  action={`/dashboard/friends/accept-friend-request?friendRequestId=${friend.id}`}
+                  method="POST"
+                >
+                  <Button>Accept</Button>
+                </form>,
+              ],
+            };
+          }, currentUser.receivedFriendRequests)}
+        />
+      </ContentWrapper>
+      <ContentWrapper>
+        <h2>Friends:</h2>
+        <Table
+          theadData={friendsFields}
+          tbodyData={map(
+            (friend) => ({
+              id: friend.id,
+              items: friendsFields.map((item) => friend[camelCase(item)]),
+            }),
+            currentUser.friends,
+          )}
+        />
+      </ContentWrapper>
     </div>
   );
 };

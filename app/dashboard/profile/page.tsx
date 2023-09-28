@@ -5,6 +5,7 @@ import { GET_USER_BY_ID } from '../../../queries';
 import { User } from '../../../types';
 import { getClient } from '../../../apollo-client';
 import { verify } from '../../../utils/jwt';
+import ContentWrapper from '../../../components/content-wrapper';
 
 interface UserData {
   user: User;
@@ -31,10 +32,11 @@ const Profile = async () => {
   return (
     <div>
       <h1>Profile</h1>
-
-      <p>First name: {user.firstName}</p>
-      <p>Last name: {user.lastName}</p>
-      <p>Username: {user.username}</p>
+      <ContentWrapper>
+        <p>First name: {user.firstName}</p>
+        <p>Last name: {user.lastName}</p>
+        <p>Username: {user.username}</p>
+      </ContentWrapper>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { User } from '../../types';
 import { getClient } from '../../apollo-client';
 import { verify } from '../../utils/jwt';
 import Header from '../../components/header';
+import MainWrapper from '../../components/main-wrapper';
 import Sidebar from '../../components/sidebar';
 
 const menuItems = [
@@ -36,7 +37,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <section>
       <Sidebar menuItems={menuItems} />
       <Header user={user} />
-      {children}
+      <MainWrapper>{children}</MainWrapper>
     </section>
   );
 }
