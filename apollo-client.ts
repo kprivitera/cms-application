@@ -8,6 +8,10 @@ import withToken from './utils/with-token-middleware';
 export const { getClient } = registerApolloClient(() => {
   return new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
-    link: from([withToken, authMiddleware, new HttpLink({ credentials: 'include', uri: 'http://localhost:4000' })]),
+    link: from([
+      withToken,
+      authMiddleware,
+      new HttpLink({ credentials: 'include', uri: 'http://localhost:4000/graphql' }),
+    ]),
   });
 });
