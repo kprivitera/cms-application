@@ -20,14 +20,7 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    console.log('before verify');
     await verify(authCookieValue, 'secret');
-
-    // if (urlObj.pathname === '/') {
-    //   const profileUrl = new URL('/dashboard/profile', req.url);
-    //   return NextResponse.redirect(profileUrl);
-    // }
-
     return NextResponse.next();
   } catch (error) {
     console.log('not authenticated');
