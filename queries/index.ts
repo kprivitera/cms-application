@@ -53,6 +53,8 @@ export const GET_USER_BY_ID = gql`
         status
         username
       }
+      profileImage
+      coverImage
     }
   }
 `;
@@ -101,5 +103,17 @@ export const SEND_FRIEND_REQUEST = gql`
 export const ACCEPT_FRIEND_REQUEST = gql`
   mutation AcceptFriendRequest($friendRequestId: Int) {
     acceptFriendRequest(friendRequestId: $friendRequestId)
+  }
+`;
+
+export const UPDATE_PROFILE_IMAGE = gql`
+  mutation UpdateProfileImage($imageUrl: String, $userId: Int) {
+    updateProfileImage(imageUrl: $imageUrl, id: $userId)
+  }
+`;
+
+export const UPDATE_PROFILE_COVER_IMAGE = gql`
+  mutation UpdateCoverImage($imageUrl: String, $userId: Int) {
+    updateCoverImage(imageUrl: $imageUrl, id: $userId)
   }
 `;

@@ -5,6 +5,8 @@ export enum FriendStatus {
   Rejected = 3,
 }
 
+export const API_URL = 'http://localhost:4000';
+
 export const DEFAULT_WORD_PAGE = '/dashboard/words/a';
 
 export const ALPHABET = [

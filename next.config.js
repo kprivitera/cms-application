@@ -7,6 +7,9 @@ const nextConfig = {
     appDir: true,
     serverActions: true,
   },
+  images: {
+    domains: ['localhost'],
+  },
   reactStrictMode: true,
   swcMinify: true,
 };
