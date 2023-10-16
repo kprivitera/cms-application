@@ -117,3 +117,60 @@ export const UPDATE_PROFILE_COVER_IMAGE = gql`
     updateCoverImage(imageUrl: $imageUrl, id: $userId)
   }
 `;
+
+export const GET_BOOKS = gql`
+  query GetBooks {
+    books {
+      author {
+        firstName
+        description
+        id
+        image
+        lastName
+      }
+      description
+      genres {
+        title
+        id
+        description
+      }
+      id
+      pageCount
+      title
+      coverImage
+    }
+  }
+`;
+
+export const GET_BOOK_BY_ID = gql`
+  query Book($bookId: ID) {
+    book(id: $bookId) {
+      author {
+        id
+        image
+        lastName
+        firstName
+        description
+      }
+      coverImage
+      description
+      genres {
+        title
+        id
+        description
+      }
+      id
+      pageCount
+      title
+      series {
+        title
+        seriesNumber
+        description
+      }
+      ratings {
+        count
+        averageRating
+      }
+    }
+  }
+`;

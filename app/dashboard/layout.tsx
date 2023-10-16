@@ -2,7 +2,6 @@ import { cookies } from 'next/headers';
 import { get } from 'lodash/fp';
 
 import { GET_USER_BY_ID } from '../../queries';
-import { User } from '../../types';
 import { getClient } from '../../apollo-client';
 import { verify } from '../../utils/jwt';
 import Header from '../../components/header';
@@ -11,6 +10,7 @@ import Sidebar from '../../components/sidebar';
 
 const menuItems = [
   { link: '/dashboard/profile', text: 'Profile' },
+  { link: '/dashboard/books', text: 'Books' },
   { link: '/dashboard/words/a', text: 'Dictionary' },
   { link: '/dashboard/friends', text: 'Friends' },
 ];

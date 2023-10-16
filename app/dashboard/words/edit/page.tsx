@@ -7,6 +7,9 @@ import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import type { NextPage } from 'next';
 
 import { GET_WORD, UPDATE_WORD } from '../../../../queries';
+import Button from '../../../../components/button';
+import ContentWrapper from '../../../../components/content-wrapper';
+import Input from '../../../../components/input';
 
 const EditWordForm: NextPage = () => {
   const searchParams = useSearchParams();
@@ -36,22 +39,24 @@ const EditWordForm: NextPage = () => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <form onSubmit={onSubmit}>
-        <fieldset>
-          <legend>Edit word</legend>
-          <p>
-            <label htmlFor="name">Word</label>
-            <input type="text" id="name" name="name" value={form.name} onChange={handleChange} />
-          </p>
-          <p>
-            <label htmlFor="word">Description</label>
-            <input type="text" id="description" name="description" value={form.description} onChange={handleChange} />
-          </p>
-          <p>
-            <button type="submit">Submit</button>
-          </p>
-        </fieldset>
-      </form>
+      <h1>Edit word</h1>
+      <ContentWrapper>
+        <form onSubmit={onSubmit}>
+          <fieldset>
+            <p>
+              <label htmlFor="name">Word</label>
+              <Input type="text" id="name" name="name" value={form.name} onChange={handleChange} />
+            </p>
+            <p>
+              <label htmlFor="word">Description</label>
+              <Input type="text" id="description" name="description" value={form.description} onChange={handleChange} />
+            </p>
+            <p>
+              <Button>Submit</Button>
+            </p>
+          </fieldset>
+        </form>
+      </ContentWrapper>
     </Suspense>
   );
 };

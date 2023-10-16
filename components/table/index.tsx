@@ -13,7 +13,7 @@ const Table = ({ theadData, tbodyData }: Props): JSX.Element => {
         <tr>
           {theadData.map((h) => {
             return (
-              <th className="uppercase font-normal text-[13px] text-left border-[#434947] border-b pr-12 py-4" key={h}>
+              <th className="uppercase font-normal text-[13px] text-left border-[#434947] border-b px-12 py-4" key={h}>
                 {h}
               </th>
             );
@@ -25,7 +25,7 @@ const Table = ({ theadData, tbodyData }: Props): JSX.Element => {
           return (
             <tr key={id}>
               {items.map((item) => (
-                <td className="border-[#434947] text-[15px] border-b pr-12 py-4" key={item}>
+                <td className="border-[#434947] text-[15px] border-b px-12 py-4" key={item}>
                   {item}
                 </td>
               ))}

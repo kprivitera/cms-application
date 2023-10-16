@@ -9,7 +9,7 @@ import UploadProfileForm from '../upload-profile-form';
 const OpenPreview = ({ buttonText, onSubmit }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div>
+    <div className="pb-4">
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <UploadProfileForm onSubmit={onSubmit} setModalOpen={setIsOpen} />
       </Modal>

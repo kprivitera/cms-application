@@ -3,6 +3,9 @@ import { revalidatePath } from 'next/cache';
 
 import { CREATE_WORD } from '../../../../queries';
 import { getClient } from '../../../../apollo-client';
+import Button from '../../../../components/button';
+import ContentWrapper from '../../../../components/content-wrapper';
+import Input from '../../../../components/input';
 
 const AddWords = async (props) => {
   async function create(formData: FormData) {
@@ -23,22 +26,26 @@ const AddWords = async (props) => {
   }
 
   return (
-    <form action={create} method="POST">
-      <fieldset>
-        <legend>Add new word</legend>
-        <p>
-          <label htmlFor="name">Word</label>
-          <input type="input" name="name" id="name" />
-        </p>
-        <p>
-          <label htmlFor="word">Description</label>
-          <input type="input" name="description" id="description" />
-        </p>
-        <p>
-          <button type="submit">Submit</button>
-        </p>
-      </fieldset>
-    </form>
+    <div>
+      <h1>Add new word</h1>
+      <ContentWrapper>
+        <form action={create} method="POST">
+          <fieldset>
+            <p>
+              <label htmlFor="name">Word</label>
+              <Input type="input" name="name" id="name" />
+            </p>
+            <p>
+              <label htmlFor="word">Description</label>
+              <Input type="input" name="description" id="description" />
+            </p>
+            <p>
+              <Button>Submit</Button>
+            </p>
+          </fieldset>
+        </form>
+      </ContentWrapper>
+    </div>
   );
 };
 

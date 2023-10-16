@@ -91,7 +91,6 @@ const Profile = async () => {
         <p>First name: {user.firstName}</p>
         <p>Last name: {user.lastName}</p>
         <p>Username: {user.username}</p>
-        <p>Profile image:</p>
       </ContentWrapper>
 
       <ContentWrapper>

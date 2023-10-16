@@ -1,7 +1,6 @@
 'use server';
 import { Suspense } from 'react';
 import { camelCase, get, map, toLower } from 'lodash/fp';
-import Link from 'next/link';
 import type { NextPage } from 'next';
 
 import { ALPHABET } from '../../../../constants';
@@ -62,8 +61,8 @@ const Words: NextPage = async ({ params }) => {
             </ul>
           </nav>
         </ContentWrapper>
-        <ContentWrapper>
-          <div className="my-4">
+        <ContentWrapper hasPadding={false}>
+          <div className="pl-6 pt-6 my-4">
             <LinkButton href={`/dashboard/words/add`}>Add new word</LinkButton>
           </div>
           <Table
