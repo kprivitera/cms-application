@@ -143,8 +143,8 @@ export const GET_BOOKS = gql`
 `;
 
 export const GET_BOOK_BY_ID = gql`
-  query Book($bookId: ID) {
-    book(id: $bookId) {
+  query Book($userId: ID, $bookId: ID) {
+    book(userId: $userId, id: $bookId) {
       author {
         id
         image
@@ -169,8 +169,23 @@ export const GET_BOOK_BY_ID = gql`
       }
       ratings {
         count
+        hasUserRated
         averageRating
+        userRating
+        ratingsBreakdown {
+          rating5
+          rating4
+          rating3
+          rating2
+          rating1
+        }
       }
     }
+  }
+`;
+
+export const MAKE_RATING = gql`
+  mutation MakeRating($rating: Int, $userId: Int, $bookId: Int) {
+    makeRating(rating: $rating, userId: $userId, bookId: $bookId)
   }
 `;

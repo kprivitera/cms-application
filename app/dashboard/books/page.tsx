@@ -34,7 +34,7 @@ const Books: NextPage = async () => {
       <h1>Dictionary</h1>
       <Suspense fallback={<p>Loading feed...</p>}>
         <ContentWrapper hasPadding={true}>
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-6 gap-4">
             {map((book: Book) => {
               return (
                 <div key={book.id}>
@@ -49,10 +49,10 @@ const Books: NextPage = async () => {
                       />
                     </div>
                   </a>
-                  <p>{book.title}</p>
-                  <p>
+                  <span className="block">{book.title}</span>
+                  <span>
                     {book.author.firstName} {book.author.lastName}
-                  </p>
+                  </span>
                 </div>
               );
             }, books)}

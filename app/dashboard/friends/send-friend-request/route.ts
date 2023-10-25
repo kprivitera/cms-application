@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
   const referer = headersList.get('referer') || DEFAULT_WORD_PAGE;
   const client = getClient();
 
-  console.log({ userId, friendId });
   try {
     await client.mutate<{ data: unknown }>({
       mutation: SEND_FRIEND_REQUEST,

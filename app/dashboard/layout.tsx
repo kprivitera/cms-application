@@ -9,10 +9,8 @@ import MainWrapper from '../../components/main-wrapper';
 import Sidebar from '../../components/sidebar';
 
 const menuItems = [
-  { link: '/dashboard/profile', text: 'Profile' },
   { link: '/dashboard/books', text: 'Books' },
   { link: '/dashboard/words/a', text: 'Dictionary' },
-  { link: '/dashboard/friends', text: 'Friends' },
 ];
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
