@@ -180,6 +180,26 @@ export const GET_BOOK_BY_ID = gql`
           rating1
         }
       }
+      reviews {
+        firstName
+        id
+        lastName
+        profileImage
+        review
+        timestamp
+        username
+        rating
+      }
+      userReview {
+        firstName
+        id
+        lastName
+        profileImage
+        review
+        timestamp
+        username
+        rating
+      }
     }
   }
 `;
@@ -187,5 +207,28 @@ export const GET_BOOK_BY_ID = gql`
 export const MAKE_RATING = gql`
   mutation MakeRating($rating: Int, $userId: Int, $bookId: Int) {
     makeRating(rating: $rating, userId: $userId, bookId: $bookId)
+  }
+`;
+
+export const MAKE_REVIEW = gql`
+  mutation MakeReview($review: String, $userId: Int, $bookId: Int) {
+    makeReview(review: $review, userId: $userId, bookId: $bookId)
+  }
+`;
+
+export const MAKE_RATING_AND_REVIEW = gql`
+  mutation MakeRatingAndReview($bookId: Int, $review: String, $rating: Int, $userId: Int) {
+    makeRatingAndReview(bookId: $bookId, review: $review, rating: $rating, userId: $userId)
+  }
+`;
+
+export const GET_BOOK_HAS_USER_RATING = gql`
+  query Book($userId: ID, $bookId: ID) {
+    book(userId: $userId, id: $bookId) {
+      ratings {
+        hasUserRated
+        userRating
+      }
+    }
   }
 `;

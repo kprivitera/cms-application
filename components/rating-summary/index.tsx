@@ -34,7 +34,6 @@ const RatingSummary = ({ averageRating, bookId, count, hasUserRated, ratingsBrea
 
   return (
     <div className="w-3/5">
-      <h2>Ratings & Reviews</h2>
       <h3>What do you think?</h3>
       {hasUserRated ? (
         <div className="mb-4">User has rated</div>

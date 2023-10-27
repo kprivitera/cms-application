@@ -1,6 +1,7 @@
 'use server';
 import { Suspense } from 'react';
-import { get, isEmpty, map, replace } from 'lodash/fp';
+import { format } from 'date-fns';
+import { get, isEmpty, map, times } from 'lodash/fp';
 import Image from 'next/image';
 import parse from 'html-react-parser';
 import type { NextPage } from 'next';
@@ -8,25 +9,13 @@ import type { NextPage } from 'next';
 import { GET_BOOK_BY_ID } from '../../../../queries';
 import { getClient } from '../../../../apollo-client';
 import ContentWrapper from '../../../../components/content-wrapper';
+import LinkButton from '../../../../components/link-button';
 import RatingSummary from '../../../../components/rating-summary';
 import Ratings from '../../../../components/ratings';
+import SingleReview from '../../../../components/single-review';
 import getUserId from '../../../../utils/get-user-id';
 
-type Genre = {
-  title: string;
-  id: number;
-  description: string;
-};
-
-type Book = {
-  title: string;
-  genre: Genre[];
-  id: number;
-  pageCount: number;
-  description: string;
-};
-
-const formatDescription = (descriptionText) => {
+const formatDescription = (descriptionText: string) => {
   const replacedNewLines = descriptionText.replace(/\\n|\n/g, '</p><p>');
   return `<p>${replacedNewLines}</p>`;
 };
@@ -40,6 +29,9 @@ const BooksDetail: NextPage = async ({ params }) => {
     variables: { bookId, userId },
   });
   const book = get('data.book', bookData);
+  const userReviewDate = book?.userReview?.timestamp ? new Date(parseInt(book.userReview.timestamp)) : null;
+  const userReviewReadableDate = userReviewDate ? format(userReviewDate, 'MMMM dd, yyyy') : null;
+
   return (
     <div>
       <h1>{book.title}</h1>
@@ -81,6 +73,8 @@ const BooksDetail: NextPage = async ({ params }) => {
               </div>
               {book.pageCount && <div>{book.pageCount} pages</div>}
             </ContentWrapper>
+
+            <h2>Ratings</h2>
             <ContentWrapper>
               <RatingSummary
                 averageRating={book.ratings.averageRating}
@@ -90,6 +84,45 @@ const BooksDetail: NextPage = async ({ params }) => {
                 hasUserRated={book.ratings.hasUserRated}
               />
             </ContentWrapper>
+
+            <h2>User review</h2>
+            <ContentWrapper>
+              {book.userReview && (
+                <SingleReview
+                  firstName={book.userReview.firstName}
+                  lastName={book.userReview.lastName}
+                  review={book.userReview.review}
+                  rating={book.userReview.rating}
+                  profileImage={book.userReview.profileImage}
+                  date={userReviewReadableDate}
+                />
+              )}
+              {!book.userReview && <LinkButton href={`/dashboard/books/${bookId}/review`}>Write a review</LinkButton>}
+            </ContentWrapper>
+
+            <h2>Community reviews</h2>
+            {book.reviews &&
+              map((review) => {
+                const timeStampDate = new Date(parseInt(review.timestamp));
+                const readableDate = format(timeStampDate, 'MMMM dd, yyyy');
+                return (
+                  <ContentWrapper>
+                    <SingleReview
+                      firstName={review.firstName}
+                      lastName={review.lastName}
+                      review={review.review}
+                      rating={review.rating}
+                      profileImage={review.profileImage}
+                      date={readableDate}
+                    />
+                  </ContentWrapper>
+                );
+              }, book.reviews)}
+            {book.reviews.length === 0 && (
+              <ContentWrapper>
+                <div>No reviews</div>
+              </ContentWrapper>
+            )}
           </div>
         </div>
       </Suspense>
