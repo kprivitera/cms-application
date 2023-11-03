@@ -1,47 +1,61 @@
-import { get, isEmpty, map, times } from 'lodash/fp';
-import React, { FC, TextareaHTMLAttributes } from 'react';
+'use client';
+import { format, parseISO } from 'date-fns';
+import { map } from 'lodash/fp';
+import React, { FC, useState } from 'react';
 
-interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  firstName: string;
-  lastName: string;
+import ContentWrapper from '../content-wrapper';
+import ProfileCard from './components/profile-card';
+
+interface SingleReviewProps {
+  id: string;
+  username: string;
   profileImage: string;
   rating: number;
   date: string;
   review: string;
 }
 
-const SingleReview: FC<TextAreaProps> = ({ firstName, lastName, profileImage, rating, date, review }) => (
-  <div className="grid grid-cols-4 gap-4">
-    <div className="col-span-1">
-      <div>{firstName}</div>
-      <div>{lastName}</div>
-      <div>
-        <img width="50" height="50" src={`http://localhost:4000/${profileImage}`} />
-      </div>
-    </div>
-    <div className="col-span-3">
-      <div className="flex flex-row justify-between mb-2">
-        <div className="flex flex-row gap-2 items-center mb-1">
-          {times(
-            () => (
-              <div>
-                <img
-                  className="fill-[#e87400]"
-                  src="/images/star.svg"
-                  alt="Description of the image"
-                  width={20}
-                  height={20}
-                />
-              </div>
-            ),
-            rating,
-          )}
+const SingleReview: FC<SingleReviewProps> = ({ comments, profileImage, rating, date, review, username }) => {
+  const [showComments, setShowComments] = useState(false);
+
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+
+  return (
+    <>
+      <ProfileCard rating={rating} comment={review} profileImage={profileImage} username={username} date={date} />
+      {comments && comments.length > 0 && (
+        <div>
+          <ContentWrapper hasPadding={false}>
+            <button className="text-center w-full text-sm underline p-2" onClick={toggleComments}>
+              {showComments ? 'Hide Comments' : 'Show Comments'}
+            </button>
+          </ContentWrapper>
+
+          {showComments &&
+            map((comment) => {
+              if (comment.id == null) {
+                return null;
+              }
+              const timeStampDate = comment.timestamp ? parseISO(comment.timestamp) : null;
+              const readableDate = timeStampDate ? format(timeStampDate, 'MMMM dd, yyyy') : null;
+              return (
+                <div className="ml-8">
+                  <ProfileCard
+                    comment={comment.comment}
+                    profileImage={comment.profileImage}
+                    username={comment.username}
+                    date={readableDate}
+                    showAddComment={false}
+                  />
+                </div>
+              );
+            }, comments)}
         </div>
-        <div>{date}</div>
-      </div>
-      <div>{review}</div>
-    </div>
-  </div>
-);
+      )}
+    </>
+  );
+};
 
 export default SingleReview;

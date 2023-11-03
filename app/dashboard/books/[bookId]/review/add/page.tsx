@@ -2,12 +2,12 @@ import { get } from 'lodash/fp';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
-import { GET_BOOK_HAS_USER_RATING, MAKE_RATING_AND_REVIEW } from '../../../../../queries';
-import { getClient } from '../../../../../apollo-client';
-import Button from '../../../../../components/button';
-import ContentWrapper from '../../../../../components/content-wrapper';
-import TextArea from '../../../../../components/textarea';
-import getUserId from '../../../../../utils/get-user-id';
+import { GET_BOOK_HAS_USER_RATING, MAKE_RATING_AND_REVIEW } from '../../../../../../queries';
+import { getClient } from '../../../../../../apollo-client';
+import Button from '../../../../../../components/button';
+import ContentWrapper from '../../../../../../components/content-wrapper';
+import TextArea from '../../../../../../components/textarea';
+import getUserId from '../../../../../../utils/get-user-id';
 
 const AddReview = async ({ params }) => {
   const bookId = get('bookId', params);

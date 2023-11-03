@@ -12,6 +12,16 @@ const nextConfig = {
   },
   reactStrictMode: true,
   swcMinify: true,
+
+  async redirects() {
+    return [
+      {
+        source: '/dashboard/words',
+        destination: '/dashboard/words/a',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

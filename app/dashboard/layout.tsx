@@ -10,7 +10,8 @@ import Sidebar from '../../components/sidebar';
 
 const menuItems = [
   { link: '/dashboard/books', text: 'Books' },
-  { link: '/dashboard/words/a', text: 'Dictionary' },
+  { link: '/dashboard/words', text: 'Dictionary' },
+  { link: '/dashboard/book-clubs', text: 'Book clubs' },
 ];
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {

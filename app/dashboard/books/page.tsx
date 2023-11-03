@@ -34,7 +34,7 @@ const Books: NextPage = async () => {
       <h1>Dictionary</h1>
       <Suspense fallback={<p>Loading feed...</p>}>
         <ContentWrapper hasPadding={true}>
-          <div className="grid grid-cols-6 gap-4">
+          <div className="grid lg:grid-cols-5 md:grid-cols-3 gap-4">
             {map((book: Book) => {
               return (
                 <div key={book.id}>
@@ -56,7 +56,6 @@ const Books: NextPage = async () => {
                 </div>
               );
             }, books)}
-            {/* <LinkButton href={`/dashboard/words/add`}>Add new word</LinkButton> */}
           </div>
         </ContentWrapper>
       </Suspense>

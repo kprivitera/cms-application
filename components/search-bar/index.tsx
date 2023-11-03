@@ -52,7 +52,7 @@ export default function SearchBooks() {
   });
 
   return (
-    <div className="container w-[58rem] h-[2rem]">
+    <div className="container w-[58rem] h-[2rem] mr-4">
       <form onSubmit={handleSubmit(onSubmit)} className="flex items-center justify-center relative h-full	">
         <input
           {...register('searchTerm')}

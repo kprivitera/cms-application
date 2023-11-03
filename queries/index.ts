@@ -189,6 +189,13 @@ export const GET_BOOK_BY_ID = gql`
         timestamp
         username
         rating
+        comments {
+          comment
+          id
+          timestamp
+          username
+          profileImage
+        }
       }
       userReview {
         firstName
@@ -230,5 +237,11 @@ export const GET_BOOK_HAS_USER_RATING = gql`
         userRating
       }
     }
+  }
+`;
+
+export const MAKE_COMMENT = gql`
+  mutation Mutation($userId: Int, $reviewId: Int, $comment: String) {
+    makeComment(userId: $userId, reviewId: $reviewId, comment: $comment)
   }
 `;

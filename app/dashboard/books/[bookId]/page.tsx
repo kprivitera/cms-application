@@ -1,6 +1,6 @@
 'use server';
 import { Suspense } from 'react';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { get, isEmpty, map, times } from 'lodash/fp';
 import Image from 'next/image';
 import parse from 'html-react-parser';
@@ -29,9 +29,10 @@ const BooksDetail: NextPage = async ({ params }) => {
     variables: { bookId, userId },
   });
   const book = get('data.book', bookData);
-  const userReviewDate = book?.userReview?.timestamp ? new Date(parseInt(book.userReview.timestamp)) : null;
-  const userReviewReadableDate = userReviewDate ? format(userReviewDate, 'MMMM dd, yyyy') : null;
+  console.log('book', book);
 
+  const userReviewDate = book?.userReview?.timestamp ? parseISO(book?.userReview?.timestamp) : null;
+  const userReviewReadableDate = userReviewDate ? format(userReviewDate, 'MMMM dd, yyyy') : null;
   return (
     <div>
       <h1>{book.title}</h1>
@@ -86,39 +87,46 @@ const BooksDetail: NextPage = async ({ params }) => {
             </ContentWrapper>
 
             <h2>User review</h2>
-            <ContentWrapper>
-              {book.userReview && (
-                <SingleReview
-                  firstName={book.userReview.firstName}
-                  lastName={book.userReview.lastName}
-                  review={book.userReview.review}
-                  rating={book.userReview.rating}
-                  profileImage={book.userReview.profileImage}
-                  date={userReviewReadableDate}
-                />
-              )}
-              {!book.userReview && <LinkButton href={`/dashboard/books/${bookId}/review`}>Write a review</LinkButton>}
-            </ContentWrapper>
+            {book.userReview && (
+              <SingleReview
+                bookId={bookId}
+                firstName={book.userReview.firstName}
+                lastName={book.userReview.lastName}
+                review={book.userReview.review}
+                rating={book.userReview.rating}
+                profileImage={book.userReview.profileImage}
+                date={userReviewReadableDate}
+                id={book.userReview.id}
+                username={book.username}
+              />
+            )}
+            {!book.userReview && (
+              <ContentWrapper>
+                <LinkButton href={`/dashboard/books/${bookId}/review/add`}>Write a review</LinkButton>
+              </ContentWrapper>
+            )}
 
             <h2>Community reviews</h2>
             {book.reviews &&
               map((review) => {
-                const timeStampDate = new Date(parseInt(review.timestamp));
-                const readableDate = format(timeStampDate, 'MMMM dd, yyyy');
+                const timeStampDate = book?.userReview?.timestamp ? parseISO(book?.userReview?.timestamp) : null;
+                const readableDate = timeStampDate ? format(timeStampDate, 'MMMM dd, yyyy') : null;
                 return (
-                  <ContentWrapper>
-                    <SingleReview
-                      firstName={review.firstName}
-                      lastName={review.lastName}
-                      review={review.review}
-                      rating={review.rating}
-                      profileImage={review.profileImage}
-                      date={readableDate}
-                    />
-                  </ContentWrapper>
+                  <SingleReview
+                    bookId={bookId}
+                    firstName={review.firstName}
+                    lastName={review.lastName}
+                    review={review.review}
+                    rating={review.rating}
+                    profileImage={review.profileImage}
+                    date={readableDate}
+                    comments={review.comments}
+                    id={review.id}
+                    username={review.username}
+                  />
                 );
               }, book.reviews)}
-            {book.reviews.length === 0 && (
+            {book.reviews && book.reviews.length === 0 && (
               <ContentWrapper>
                 <div>No reviews</div>
               </ContentWrapper>

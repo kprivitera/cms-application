@@ -1,6 +1,6 @@
 'use client';
 
-import { map } from 'lodash/fp';
+import { includes, map } from 'lodash/fp';
 import { usePathname } from 'next/navigation';
 
 import MenuItem from '../menu-item';
@@ -21,7 +21,7 @@ const SideBar = ({ menuItems }: SidebarProps) => {
       <div className="text-[1.25rem] p-4">Book database</div>
       <ul className="flex flex-col">
         {map(({ link, text }) => {
-          const isActive = pathName === link;
+          const isActive = includes(link, pathName);
           return (
             <li key={link}>
               <MenuItem active={isActive} href={link}>
