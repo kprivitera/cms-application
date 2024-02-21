@@ -6,6 +6,7 @@ import { MAKE_COMMENT } from '../../../../../../../queries';
 import { getClient } from '../../../../../../../apollo-client';
 import Button from '../../../../../../../components/button';
 import ContentWrapper from '../../../../../../../components/content-wrapper';
+import Field from '../../../../../../../components/field';
 import TextArea from '../../../../../../../components/textarea';
 import getUserId from '../../../../../../../utils/get-user-id';
 
@@ -36,7 +37,7 @@ const AddComment = async ({ params }) => {
         <form action={create} method="POST">
           <fieldset>
             <p>
-              <TextArea label="My Label" name="comment" rows={5} cols={30} />
+              <Field label="Comment" name="comment" rows={5} cols={30} />
             </p>
             <p>
               <Button>Submit</Button>

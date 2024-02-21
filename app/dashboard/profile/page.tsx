@@ -19,8 +19,8 @@ const Profile = async () => {
     'use server';
     const userId = await getUserId();
     const response = await fetch(`${API_URL}/file-upload/profile/${userId}`, {
-      method: 'POST',
       body: formData,
+      method: 'POST',
     });
     const imageUrl = await response.json();
 

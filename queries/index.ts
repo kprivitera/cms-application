@@ -90,6 +90,7 @@ export const SEARCH_USERS = gql`
       lastName
       username
       friendStatus
+      profileImage
     }
   }
 `;
@@ -243,5 +244,68 @@ export const GET_BOOK_HAS_USER_RATING = gql`
 export const MAKE_COMMENT = gql`
   mutation Mutation($userId: Int, $reviewId: Int, $comment: String) {
     makeComment(userId: $userId, reviewId: $reviewId, comment: $comment)
+  }
+`;
+
+export const CREATE_BOOK_CLUB = gql`
+  mutation CreateBookClub($input: BookClubInput) {
+    createBookClub(input: $input) {
+      id
+      name
+      description
+      theme
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_BOOK_CLUB_BY_ID = gql`
+  query BookClub($bookClubId: ID) {
+    bookClub(id: $bookClubId) {
+      id
+      name
+      description
+      theme
+      createdAt
+      updatedAt
+      members {
+        id
+        firstName
+        lastName
+        email
+        profileImage
+        username
+      }
+    }
+  }
+`;
+
+export const GET_USERS_BOOK_CLUBS = gql`
+  query User($userId: Int) {
+    user(id: $userId) {
+      firstName
+      bookClubs {
+        id
+        name
+        description
+        theme
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const ADD_CLUB_MEMBER = gql`
+  mutation AddClubMember($input: AddClubMemberInput) {
+    addClubMember(input: $input) {
+      id
+      name
+      description
+      theme
+      createdAt
+      updatedAt
+    }
   }
 `;

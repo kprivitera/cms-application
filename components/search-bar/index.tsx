@@ -9,15 +9,6 @@ type FormValues = {
   searchTerm: string;
 };
 
-type Book = {
-  authorFirstName: string;
-  authorLastName: string;
-  coverImage: string;
-  description: string;
-  id: string;
-  title: string;
-};
-
 const SEARCH_BOOKS = gql`
   query SearchBooks($searchTerm: String!) {
     searchBooks(searchTerm: $searchTerm) {

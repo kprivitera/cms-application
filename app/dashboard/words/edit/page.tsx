@@ -1,6 +1,7 @@
 'use client';
 import { Suspense, useState } from 'react';
 import { flow, get, omit, set, toNumber } from 'lodash/fp';
+import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 import { useSearchParams } from 'next/navigation';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
@@ -9,7 +10,7 @@ import type { NextPage } from 'next';
 import { GET_WORD, UPDATE_WORD } from '../../../../queries';
 import Button from '../../../../components/button';
 import ContentWrapper from '../../../../components/content-wrapper';
-import Input from '../../../../components/input';
+import Field from '../../../../components/field';
 
 const EditWordForm: NextPage = () => {
   const searchParams = useSearchParams();
@@ -22,7 +23,7 @@ const EditWordForm: NextPage = () => {
   });
   const [form, setForm] = useState(get('word', data));
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setForm({ ...form, [name]: value });
   };
@@ -44,12 +45,16 @@ const EditWordForm: NextPage = () => {
         <form onSubmit={onSubmit}>
           <fieldset>
             <p>
-              <label htmlFor="name">Word</label>
-              <Input type="text" id="name" name="name" value={form.name} onChange={handleChange} />
+              <Field id="name" label="Word" name="name" value={form.name} onChange={handleChange} />
             </p>
             <p>
-              <label htmlFor="word">Description</label>
-              <Input type="text" id="description" name="description" value={form.description} onChange={handleChange} />
+              <Field
+                id="description"
+                label="Description"
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+              />
             </p>
             <p>
               <Button>Submit</Button>

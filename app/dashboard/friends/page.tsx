@@ -8,7 +8,7 @@ import { getClient } from '../../../apollo-client';
 import { verify } from '../../../utils/jwt';
 import Button from '../../../components/button';
 import ContentWrapper from '../../../components/content-wrapper';
-import Input from '../../../components/input';
+import Field from '../../../components/field';
 import Table from '../../../components/table';
 
 interface UserData {
@@ -50,7 +50,7 @@ const Friends = async ({ searchParams }) => {
           <fieldset>
             {/* <legend>User search:</legend> */}
             {/* <label htmlFor="username">Search: </label> */}
-            <Input id="searchTerm" name="searchTerm" type="text" placeholder="Search user" required />
+            <Field id="searchTerm" name="searchTerm" type="text" placeholder="Search user" required />
             <p>
               <Button>Submit</Button>
             </p>

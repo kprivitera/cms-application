@@ -5,7 +5,7 @@ import { CREATE_WORD } from '../../../../queries';
 import { getClient } from '../../../../apollo-client';
 import Button from '../../../../components/button';
 import ContentWrapper from '../../../../components/content-wrapper';
-import Input from '../../../../components/input';
+import Field from '../../../../components/field';
 
 const AddWords = async (props) => {
   async function create(formData: FormData) {
@@ -32,12 +32,10 @@ const AddWords = async (props) => {
         <form action={create} method="POST">
           <fieldset>
             <p>
-              <label htmlFor="name">Word</label>
-              <Input type="input" name="name" id="name" />
+              <Field type="input" label="Word" name="name" id="name" />
             </p>
             <p>
-              <label htmlFor="word">Description</label>
-              <Input type="input" name="description" id="description" />
+              <Field type="input" label="Description" name="description" id="description" />
             </p>
             <p>
               <Button>Submit</Button>

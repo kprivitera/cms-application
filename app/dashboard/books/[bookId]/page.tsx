@@ -1,7 +1,7 @@
 'use server';
 import { Suspense } from 'react';
 import { format, parseISO } from 'date-fns';
-import { get, isEmpty, map, times } from 'lodash/fp';
+import { get, isEmpty, map } from 'lodash/fp';
 import Image from 'next/image';
 import parse from 'html-react-parser';
 import type { NextPage } from 'next';
@@ -29,8 +29,6 @@ const BooksDetail: NextPage = async ({ params }) => {
     variables: { bookId, userId },
   });
   const book = get('data.book', bookData);
-  console.log('book', book);
-
   const userReviewDate = book?.userReview?.timestamp ? parseISO(book?.userReview?.timestamp) : null;
   const userReviewReadableDate = userReviewDate ? format(userReviewDate, 'MMMM dd, yyyy') : null;
   return (
@@ -61,7 +59,7 @@ const BooksDetail: NextPage = async ({ params }) => {
               <h2 className="mb-4">
                 {book.author.firstName} {book.author.lastName}
               </h2>
-              <Ratings averageRating={book.ratings.averageRating} count={book.ratings.count} />
+              <Ratings averageRating={get('ratings.averageRating', book)} count={get('ratings.count', book)} />
               <div className="mb-4">{parse(formatDescription(book.description))}</div>
               <div className="flex flex-row gap-2 items-center mb-4">
                 {!isEmpty(book.genres) && <div>Genres:</div>}
@@ -76,15 +74,17 @@ const BooksDetail: NextPage = async ({ params }) => {
             </ContentWrapper>
 
             <h2>Ratings</h2>
-            <ContentWrapper>
-              <RatingSummary
-                averageRating={book.ratings.averageRating}
-                bookId={parseInt(bookId)}
-                count={book.ratings.count}
-                ratingsBreakdown={book.ratings.ratingsBreakdown}
-                hasUserRated={book.ratings.hasUserRated}
-              />
-            </ContentWrapper>
+            {book.ratings && (
+              <ContentWrapper>
+                <RatingSummary
+                  averageRating={book.ratings.averageRating}
+                  bookId={parseInt(bookId)}
+                  count={book.ratings.count}
+                  ratingsBreakdown={book.ratings.ratingsBreakdown}
+                  hasUserRated={book.ratings.hasUserRated}
+                />
+              </ContentWrapper>
+            )}
 
             <h2>User review</h2>
             {book.userReview && (

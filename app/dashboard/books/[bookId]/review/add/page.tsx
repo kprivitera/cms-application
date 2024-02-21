@@ -1,12 +1,11 @@
 import { get } from 'lodash/fp';
 import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
 
 import { GET_BOOK_HAS_USER_RATING, MAKE_RATING_AND_REVIEW } from '../../../../../../queries';
 import { getClient } from '../../../../../../apollo-client';
 import Button from '../../../../../../components/button';
 import ContentWrapper from '../../../../../../components/content-wrapper';
-import TextArea from '../../../../../../components/textarea';
+import Field from '../../../../../../components/field';
 import getUserId from '../../../../../../utils/get-user-id';
 
 const AddReview = async ({ params }) => {
@@ -18,7 +17,6 @@ const AddReview = async ({ params }) => {
     query: GET_BOOK_HAS_USER_RATING,
     variables: { bookId, userId },
   });
-  console.log(userRatingData);
   const userRating = get('data.book.ratings', userRatingData);
 
   async function create(formData: FormData) {
@@ -37,25 +35,29 @@ const AddReview = async ({ params }) => {
     redirect(`/dashboard/books/${bookId}`);
   }
 
+  const ratingOptions = [
+    { label: '1', value: '1' },
+    { label: '2', value: '2' },
+    { label: '3', value: '3' },
+    { label: '4', value: '4' },
+    { label: '5', value: '5' },
+  ];
+
   return (
     <div>
       <h1>Review</h1>
       <ContentWrapper>
         <form action={create} method="POST">
           <fieldset>
-            {!userRating.hasUserRated ? (
+            {!userRating?.hasUserRated ? (
               <p>
-                <input type="radio" id="html" name="rating" value="1" />
-                <input type="radio" id="css" name="rating" value="2" />
-                <input type="radio" id="javascript" name="rating" value="3" />
-                <input type="radio" id="javascript" name="rating" value="4" />
-                <input type="radio" id="javascript" name="rating" value="5" />
+                <Field type="select" label="Rating" name="rating" options={ratingOptions} />
               </p>
             ) : (
               <div>User has already made a rating.</div>
             )}
             <p>
-              <TextArea label="My Label" name="review" rows={5} cols={30} />
+              <Field label="My Label" type="textarea" name="review" rows={5} cols={30} />
             </p>
             <p>
               <Button>Submit</Button>

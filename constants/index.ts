@@ -37,3 +37,10 @@ export const ALPHABET = [
   'Y',
   'Z',
 ];
+
+export const INPUT_TYPES = {
+  INPUT: 'input',
+  TEXTAREA: 'textarea',
+  SELECT: 'select',
+  RADIO: 'radio',
+} as const;

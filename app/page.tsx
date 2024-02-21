@@ -7,7 +7,7 @@ import { LOGIN_USER } from '../queries';
 import { getClient } from '../apollo-client';
 import Button from '../components/button';
 import ContentWrapper from '../components/content-wrapper';
-import Input from '../components/input';
+import Field from '../components/field';
 
 const Home: NextPage = () => {
   async function create(formData: FormData) {
@@ -29,10 +29,8 @@ const Home: NextPage = () => {
       <ContentWrapper>
         <h1 className="">Welcome</h1>
         <form action={create}>
-          <label htmlFor="username">Name</label>
-          <Input id="username" name="username" type="text" required />
-          <label htmlFor="password">Email</label>
-          <Input id="password" name="password" type="text" required />
+          <Field id="username" label="Username" name="username" type="input" required />
+          <Field id="password" label="Password" name="password" type="input" required />
           <Button>Submit</Button>
         </form>
       </ContentWrapper>

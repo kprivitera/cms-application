@@ -34,13 +34,13 @@ const Books: NextPage = async () => {
       <h1>Dictionary</h1>
       <Suspense fallback={<p>Loading feed...</p>}>
         <ContentWrapper hasPadding={true}>
-          <div className="grid lg:grid-cols-5 md:grid-cols-3 gap-4">
+          <div className="grid lg:grid-cols-6 md:grid-cols-3 gap-4">
             {map((book: Book) => {
               return (
                 <div key={book.id}>
                   <a href={`/dashboard/books/${book.id}`}>
                     <div className="aspect-[10/16] relative">
-                      <img
+                      <Image
                         className="inset-0 h-full object-cover"
                         src={`http://localhost:4000/${book.coverImage}`}
                         alt="Description of the image"
