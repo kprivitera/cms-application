@@ -8,16 +8,14 @@ import Field from '../../../../../../../components/field';
 
 type EditBookClubFormProps = {
   bookClubData: BookClub;
-  onSubmit: (formData: FormData) => Promise<void>;
 };
 
-const EditBookClubForm = ({ onSubmit, bookClubData }: EditBookClubFormProps) => {
+const EditBookClubForm = ({ bookClubData }: EditBookClubFormProps) => {
   const [form, setForm] = useState({
     description: bookClubData.description,
     name: bookClubData.name,
     theme: bookClubData.theme,
   });
-  console.log(form);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -26,25 +24,25 @@ const EditBookClubForm = ({ onSubmit, bookClubData }: EditBookClubFormProps) => 
 
   return (
     <ContentWrapper>
-      <form action={onSubmit}>
+      <form action={`/dashboard/book-clubs/edit?bookClubId=${bookClubData.id}`} method="POST">
         <fieldset>
-          <Field id="name" label="Name" name="name" type="input" value={form.name} onChange={handleChange} required />
+          <Field value={form.name} onChange={handleChange} id="name" label="Name" name="name" type="input" required />
           <Field
+            value={form.description}
+            onChange={handleChange}
             id="description"
             label="Description"
             name="description"
             type="textarea"
-            value={form.description}
-            onChange={handleChange}
             required
           />
           <Field
+            value={form.theme}
+            onChange={handleChange}
             id="theme"
             label="Theme"
             name="theme"
             type="input"
-            value={form.theme}
-            onChange={handleChange}
             required
           />
           <Button>Submit</Button>

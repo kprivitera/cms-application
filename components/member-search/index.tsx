@@ -6,21 +6,16 @@ import { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 
-import { ADD_CLUB_MEMBER, SEARCH_USERS } from '../../queries';
+import { SEARCH_USERS } from '../../queries';
 import { User } from '../../types';
 import { get } from 'lodash/fp';
+import Button from '../button';
 
 type FormValues = {
   searchTerm: string;
 };
 
-const MemberSearch = ({
-  onAddUserClick,
-  userId,
-}: {
-  onAddUserClick: (userId: number) => Promise<void>;
-  userId: number;
-}) => {
+const MemberSearch = ({ bookClubId, userId }: { bookClubId: string; userId: number }) => {
   const { register, handleSubmit, watch } = useForm<FormValues>();
   const watchedSearchTerm = watch('searchTerm');
 
@@ -58,7 +53,7 @@ const MemberSearch = ({
           </button>
         </div>
       </form>
-      <div className="bg-[#2f3349e3] pt-2 h-[200px]">
+      <div className="bg-[#2f3349e3] pt-2">
         {users &&
           users.map((user: User) => (
             <div key={user.id} className="flex items-center space-x-4 pl-[0.5rem] py-4 border-[#434947] border-b">
@@ -71,7 +66,12 @@ const MemberSearch = ({
               </div>
               <div>
                 <p className="text-[0.75rem] text-gray-500">{`${user.firstName} ${user.lastName}`}</p>
-                <div onClick={() => onAddUserClick(user.id)}>Add user</div>
+                <form
+                  action={`/dashboard/book-clubs/add-member?memberId=${user.id}&bookClubId=${bookClubId}`}
+                  method="POST"
+                >
+                  <Button>Add</Button>
+                </form>
               </div>
             </div>
           ))}

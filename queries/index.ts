@@ -277,6 +277,25 @@ export const GET_BOOK_CLUB_BY_ID = gql`
         profileImage
         username
       }
+      books {
+        author {
+          firstName
+          description
+          id
+          image
+          lastName
+        }
+        description
+        genres {
+          title
+          id
+          description
+        }
+        id
+        pageCount
+        title
+        coverImage
+      }
     }
   }
 `;
@@ -306,6 +325,30 @@ export const ADD_CLUB_MEMBER = gql`
       theme
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const EDIT_BOOK_CLUB = gql`
+  mutation EditBookClub($input: EditBookClubInput) {
+    editBookClub(input: $input) {
+      id
+    }
+  }
+`;
+
+export const REMOVE_CLUB_MEMBER = gql`
+  mutation RemoveClubMember($input: RemoveClubMemberInput) {
+    removeClubMember(input: $input) {
+      id
+    }
+  }
+`;
+
+export const REMOVE_CLUB_BOOK = gql`
+  mutation RemoveClubBook($input: RemoveClubBookInput) {
+    removeClubBook(input: $input) {
+      id
     }
   }
 `;

@@ -15,7 +15,7 @@ const BookClubs = async () => {
 
   const user = get('data.user', usersBookClubData);
   const usersBookClubs = get('bookClubs', user);
-  console.log(user);
+  // console.log(user);
   return (
     <div>
       <h1>Book clubs</h1>
@@ -25,7 +25,7 @@ const BookClubs = async () => {
           return (
             <div>
               <div>
-                {name} <a href={`/dashboard/book-clubs/${id}/edit`}>Edit</a>
+                {name} <LinkButton href={`/dashboard/book-clubs/${id}/edit`}>Edit</LinkButton>
               </div>
             </div>
           );
